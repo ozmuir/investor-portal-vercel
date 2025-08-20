@@ -112,7 +112,7 @@ const changeEmail = useChangeEmail();
 const after_changeEmail = useAfter_changeEmail();
 
 async function _submit(values) {
-  lock(messages.progress.emailing_confirmation);
+  lock(messages.progress.emailing);
   enabledRef.value = false;
   const { data, error } = await changeEmail(values.email);
   if (error) {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="typeof lockRef !== 'undefined'" class="blocker">
+  <div v-if="typeof lockRef !== 'undefined'" class="blurrer blocker">
     <Loader type="bounce" />
     <div v-if="typeof lockRef === 'string'" class="text-large">
       {{ lockRef }}
@@ -9,7 +9,7 @@
 
 <script setup>
 defineOptions({ name: "C_Blocker" });
-import Loader from "../components/Loader";
+import Loader from "../components/Loader.vue";
 import { lockRef } from "../state/ui";
 </script>
 
@@ -21,7 +21,6 @@ import { lockRef } from "../state/ui";
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(2px);
   display: flex;
   flex-direction: column;
   align-items: center;

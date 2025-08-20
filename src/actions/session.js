@@ -16,7 +16,7 @@ export function useOnSession(callback = null) {
   });
 }
 
-export const useSignIn = () => {
+export const use_sendSignInEmail = () => {
   const router = useRouter();
   return async (email) => {
     // Redirect URLs: https://supabase.com/dashboard/project/_/auth/url-configuration
@@ -39,7 +39,7 @@ export const useSignIn = () => {
   };
 };
 
-export function useAfter_signIn() {
+export function useAfter_sentSignInEmail() {
   const toast = useMessage();
   // const router = useRouter();
   return ({ error }) => {

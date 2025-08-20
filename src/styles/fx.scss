@@ -170,3 +170,8 @@
 .fx_zoom_in:active {
   transform: scale(1.05);
 }
+
+.blurrer,
+.n-modal-body-wrapper {
+  backdrop-filter: blur(2px);
+}

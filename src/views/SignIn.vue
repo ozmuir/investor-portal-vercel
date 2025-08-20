@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import Heading from "../components/Heading";
-import SignInForm from "../components/SignInForm";
+import Heading from "../components/Heading.vue";
+import SignInForm from "../components/SignInForm.vue";
 import messages from "../messages.json";
 </script>

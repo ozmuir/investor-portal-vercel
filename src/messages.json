@@ -7,7 +7,6 @@
     "request_a_new": "Create a support request",
     "request_the_new": "Create the support request",
     "request_update": "Update the support request",
-    "account_log_in": "Send login link",
     "account_delete": "Delete your account",
     "upload_files": "Upload documents",
     "upload_the_files": "Upload the documents"
@@ -41,11 +40,10 @@
     "account_signed_out": "You’re now logged out.",
     "account_deleted": "Your account has been deleted."
   },
-  "account_login_intro": "Please enter the email you used to invest. We’ll send a login link to that address.",
   "progress": {
-    "emailing_confirmation": "Sending you a confirmation email…",
-    "emailing_verification": "Sending you a verification email…",
-    "loading": "Loading…"
+    "emailing": "Sending you an email…",
+    "loading": "Loading…",
+    "verifying": "Verifying…"
   },
   "feedback": {
     "log_in": {

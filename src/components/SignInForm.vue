@@ -1,53 +1,19 @@
-<template>
-  <NForm
-    class="root flex-col gap-1"
-    ref="formRef"
-    :model="modelRef"
-    :rules="rules"
-    @submit.prevent="handleSubmit"
-    :disabled="!enabledRef"
-  >
-    <div>
-      {{ messages.account_login_intro }}
-    </div>
-    <NFormItem
-      path="email"
-      :label="messages.field_label.email"
-      :show-label="false"
-    >
-      <NInput
-        required
-        type="email"
-        v-model:value="modelRef.email"
-        :placeholder="messages.field_hint.email"
-      />
-    </NFormItem>
-    <FormButtons
-      :submit="{
-        // Icon2: IconLogin,
-        content: messages.action.account_log_in,
-        disabled: !enabledRef || modelRef.email === '',
-      }"
-      style="justify-content: center"
-    />
-    <FeedBack :success="successRef" :error="errorRef" />
-  </NForm>
-</template>
-
 <script setup>
-// import { IconLogin } from "../components/icons";
 import { NForm, NFormItem, NInput } from "naive-ui";
 import { ref } from "vue";
-import { useSignIn, useAfter_signIn } from "../actions/session";
-import FormButtons from "../components/Button/FormButtons";
+import {
+  use_sendSignInEmail,
+  useAfter_sentSignInEmail,
+} from "../actions/session";
+import { supabase } from "../actions/supabase";
+import FormButtons from "../components/Button/FormButtons.vue";
 import FeedBack from "../components/FeedBack.vue";
+import OtpModal from "../components/OtpModal.vue";
 import messages from "../messages.json";
 import { lock } from "../state/ui";
 
 const formRef = ref(null);
 const modelRef = ref({ email: "" });
-
-const enabledRef = ref(true);
 
 const successRef = ref("");
 const errorRef = ref("");
@@ -64,30 +30,10 @@ const rules = {
         }
         return true;
       },
-      trigger: ["input", "blur"],
+      trigger: ["blur"], // "input"
     },
   ],
 };
-
-const signIn = useSignIn();
-const afterSignIn = useAfter_signIn();
-
-async function _signIn(email) {
-  lock(messages.progress.emailing_verification);
-  enabledRef.value = false;
-  const { error } = await signIn(email);
-  if (error) {
-    console.error("Error signing in:", error.message);
-    enabledRef.value = true; // allow resubmit
-    successRef.value = "";
-    errorRef.value = error.message;
-  } else {
-    successRef.value = messages.feedback.log_in.email_sent;
-    errorRef.value = "";
-  }
-  lock();
-  return afterSignIn({ error });
-}
 
 function handleSubmit() {
   formRef.value
@@ -97,9 +43,12 @@ function handleSubmit() {
         successRef.value = "";
         errorRef.value = `Validation errors: ${JSON.stringify(errors)}`;
       } else {
-        _signIn(modelRef.value.email);
         successRef.value = "";
         errorRef.value = "";
+
+        sendEmail().then(() => {
+          showOtpModalRef.value = true;
+        });
       }
     })
     .catch((err) => {
@@ -108,4 +57,89 @@ function handleSubmit() {
       errorRef.value = `Error during validation: ${err.message}`;
     });
 }
+
+const sendSignInEmail = use_sendSignInEmail();
+const after_sentSignInEmail = useAfter_sentSignInEmail();
+
+async function sendEmail() {
+  lock(messages.progress.emailing);
+  const email = modelRef.value.email;
+  const { error } = await sendSignInEmail(email);
+  lock();
+
+  if (error) {
+    console.error("Error sending sign in email:", error.message);
+    successRef.value = "";
+    errorRef.value = error.message;
+  } else {
+    successRef.value = messages.feedback.log_in.email_sent;
+    errorRef.value = "";
+  }
+
+  return after_sentSignInEmail({ error });
+}
+
+const showOtpModalRef = ref(false);
+const otpSuccessRef = ref("");
+const otpErrorRef = ref("");
+
+async function handleOtpSubmit(otp) {
+  lock(messages.progress.verifying);
+  const { email } = modelRef.value;
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token: otp,
+    type: "email",
+  });
+  lock();
+
+  if (error) {
+    console.error("Error verifying OTP:", error.message);
+    otpSuccessRef.value = "";
+    otpErrorRef.value = error.message;
+  } else {
+    console.log("Success verifying OTP:", data.session);
+    otpSuccessRef.value = "";
+    otpErrorRef.value = "";
+    showOtpModalRef.value = false;
+  }
+}
 </script>
+
+<template>
+  <NForm
+    class="root flex-col gap-1"
+    ref="formRef"
+    :model="modelRef"
+    :rules="rules"
+    @submit.prevent="handleSubmit"
+  >
+    <div>Please enter the email you used to invest.</div>
+    <NFormItem
+      path="email"
+      :label="messages.field_label.email"
+      :show-label="false"
+    >
+      <NInput
+        required
+        type="email"
+        v-model:value="modelRef.email"
+        :placeholder="messages.field_hint.email"
+      />
+    </NFormItem>
+    <FormButtons
+      :submit="{ content: 'Send OTP Code' }"
+      style="justify-content: center"
+    />
+    <FeedBack :success="successRef" :error="errorRef" />
+  </NForm>
+  <OtpModal
+    :show="showOtpModalRef"
+    @submit="handleOtpSubmit"
+    @close="showOtpModalRef = false"
+  >
+    Please enter the OTP code we just sent you.
+    <template #success v-if="otpSuccessRef">{{ otpSuccessRef }}</template>
+    <template #error v-if="otpErrorRef">{{ otpErrorRef }}</template>
+  </OtpModal>
+</template>
