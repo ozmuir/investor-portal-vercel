@@ -17,7 +17,8 @@
           </div>
         </template>
         <!-- <Collapse :lines="2"> -->
-        <component :is="item.body" />
+        <component v-if="isVNode(item.body)" :is="item.body" />
+        <div v-else v-html="item.body"></div>
         <!-- </Collapse> -->
       </NThing>
     </NListItem>
@@ -28,6 +29,7 @@
 defineOptions({ name: "CNews" });
 
 import { NList, NListItem, NThing } from "naive-ui";
+import { isVNode } from "vue";
 // import Collapse from "../components/Collapse";
 import Heading from "../components/Heading.vue";
 import news from "../news.js";

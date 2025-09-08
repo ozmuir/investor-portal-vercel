@@ -82,6 +82,7 @@ async function handleSubmit() {
             label="OTP"
             :show-label="false"
             :show-feedback="false"
+            :style="{ width: '100%' }"
           >
             <NInputOtp
               v-model:value="modelRef.otp"
@@ -97,3 +98,17 @@ async function handleSubmit() {
     </NForm>
   </NModal>
 </template>
+
+<style>
+.n-input-otp {
+  width: 100%;
+}
+.n-input-otp .n-input {
+  flex-grow: 1;
+  aspect-ratio: 0.75;
+}
+.n-input-otp .n-input__input-el {
+  height: 100%;
+  font-size: 2em;
+}
+</style>
