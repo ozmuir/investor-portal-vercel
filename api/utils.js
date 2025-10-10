@@ -294,11 +294,11 @@ export async function getThreadInfo(req_id, supabase) {
 
 import { google } from "googleapis";
 
-const { GMAIL_AGENT_KEY_SECRET } = process.env;
-if (!GMAIL_AGENT_KEY_SECRET) throw new Error("GMAIL_AGENT_KEY_SECRET not set.");
+const { GMAIL_SENDER_KEY_SECRET } = process.env;
+if (!GMAIL_SENDER_KEY_SECRET) throw new Error("GMAIL_SENDER_KEY_SECRET not set.");
 
 const credentials = JSON.parse(
-  Buffer.from(GMAIL_AGENT_KEY_SECRET, "base64").toString("utf8")
+  Buffer.from(GMAIL_SENDER_KEY_SECRET, "base64").toString("utf8")
 );
 
 const scopes = [

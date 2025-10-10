@@ -2165,8 +2165,8 @@ var isSmallScreen = window.matchMedia
   style.position = "fixed";
   style.top = "0";
   style.left = "0";
-  style.width = "100vw";
-  style.height = "100vh";
+  style.width = "100lvw";
+  style.height = "100lvh";
 
   var container = window.mana_fluid?.container || document.body;
   container.insertBefore(canvas, container.firstChild);

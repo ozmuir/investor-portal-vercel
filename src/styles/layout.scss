@@ -75,7 +75,7 @@
   overflow: hidden; // helps against ZOOM-OUT-like "gap" on mobile when using elements that overflow the viewport
 
   min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100lvh;
 
   @extend .flex-col;
   @extend .flex-center;
