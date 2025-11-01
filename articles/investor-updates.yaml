@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=./investor-updates.schema.yaml
+- uuid: 019a3fcc-b898-73a4-87c7-c9fe6d4ad658
+  url: ""
+  date: "2025-08-12T11:00:00.000Z"
+  title: "Summer 2025 Consolidation Update"
+  summary: ""
+  body: |-
+    <p>Dear Investors,</p>
+    <p>As you may know, Orthogonal Thinker, Inc. has announced plans to acquire and consolidate Ei.Ventures, Inc., our majority-owned subsidiary, into Orthogonal. Here is the official press release:</p>
+    <a href="https://www.newsfilecorp.com/release/262252" target="_blank">Orthogonal Thinker to Acquire Ei.Ventures, Unifying Vision Across Consciousness, Wellness, and AI</a>
+    <p>Here’s where things stand:</p>
+    <ul>
+      <li>
+        <b>Cap Table & Legal Status</b>
+        <br />
+        – We are working closely with securities counsel to verify every Ei.Ventures share as we consolidate into Orthogonal Thinker, Inc. Once verification is complete, DRS statements will be hosted with Endeavor Trust. Until then, you can confirm your holdings through the Orthogonal Investor Portal.
+      </li>
+      <li>
+        <b>Liquidity Timeline</b>
+        <br />
+        – We are targeting the close of this transaction by the end of Q1 2026. Any liquidity events will be communicated promptly once timing and compliance are finalized.
+      </li>
+      <li>
+        <b>Valuation</b>
+        <br />
+        – Your final exchange ratio—and exact value—will be detailed in the formal offer documents this fall. We intend to provide a premium over relative valuation, aligning all shareholders for long-term growth.
+      </li>
+      <li>
+        <b>Next Action</b>
+        <br />
+        – No action is required at this time. You will receive formal transaction documents in October 2025 with timelines, instructions, and the final exchange ratio.
+      </li>
+      <li>
+        <b>Cap Table & Legal Status</b>
+        <br />
+        – We are working closely with securities counsel to verify every Ei.Ventures share as we consolidate into Orthogonal Thinker, Inc. Once verification is complete, DRS statements will be hosted with Endeavor Trust. Until then, you can confirm your holdings through the Orthogonal Investor Portal.
+      </li>
+    </ul>
+    <p>We appreciate your continued trust and patience as we complete this important step in building a stronger, more unified company. Our focus remains on executing with precision, protecting shareholder interests, and positioning Orthogonal for sustained success in the years ahead.</p>
+  tags: []
+
+- uuid: 019a3fcc-f28b-702a-903c-897ceb53d168
+  url: ""
+  date: "2025-08-01T12:30:00.000Z"
+  title: "Orthogonal Thinker Investments added to the Portal."
+  summary: ""
+  body: |-
+    <p>We've added Orthogonal Thinker investments to the Portal. You can now access and review your investments across both entities.</p>
+    <p>We’re actively responding to all investor inquiries. If there’s a delay, please know we’re taking the extra time to verify all data privately and securely—ensuring no sensitive information is ever visible to the wrong party.</p>
+    <p>Everything is safe. Thank you for your trust and patience as we grow this together.</p>
+  tags: []
+
+- uuid: 019a3fcd-075d-738a-a032-0f9b28a60edf
+  url: ""
+  date: "2025-07-08T19:20:33.277Z"
+  title: "Welcome to the Orthogonal Investor Portal!"
+  summary: ""
+  body: |-
+    <p>You can now:</p>
+    <ul>
+      <li>View and verify your investment details</li>
+      <li>Upload supporting documents securely</li>
+      <li>Submit support requests for any discrepancies</li>
+    </ul>
+    <p>Please explore the options below to get started.</p>
+    <p>This is an early-stage rollout, and you may notice occasional bugs or missing data. Response times may be limited as we continue refining the experience.</p>
+    <p>Thank you for being part of this journey.</p>
+  tags: []

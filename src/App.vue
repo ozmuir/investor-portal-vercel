@@ -1,20 +1,3 @@
-<template>
-  <NConfigProvider
-    v-bind="{
-      theme: darkTheme,
-      themeOverrides,
-    }"
-  >
-    <NMessageProvider :duration="5000" :keep-alive-on-hover="true">
-      <UrlMessage />
-      <div style="position: relative">
-        <Blocker />
-        <Layout class="gradientz" style="color: #ffffff" />
-      </div>
-    </NMessageProvider>
-  </NConfigProvider>
-</template>
-
 <script setup>
 import { NConfigProvider, NMessageProvider, darkTheme } from "naive-ui";
 import { onMounted, shallowRef, watch } from "vue";
@@ -51,8 +34,27 @@ onMounted(() => {
 */
 </script>
 
+<template>
+  <NConfigProvider
+    v-bind="{
+      theme: darkTheme,
+      themeOverrides,
+    }"
+  >
+    <NMessageProvider :duration="5000" :keep-alive-on-hover="true">
+      <UrlMessage />
+      <div style="position: relative">
+        <Blocker />
+        <Layout
+          class="rainbow"
+          style="background-attachment: fixed !important; color: #ffffff"
+        />
+      </div>
+    </NMessageProvider>
+  </NConfigProvider>
+</template>
+
 <style src="modern-normalize/modern-normalize.css"></style>
-<style lang="scss" src="./styles/document.scss"></style>
 <style lang="scss" src="./styles/text.scss"></style>
 <style lang="scss" src="./styles/layout.scss"></style>
 <style lang="scss" src="./styles/alignment.scss"></style>
@@ -60,3 +62,4 @@ onMounted(() => {
 <style lang="scss" src="./styles/naive-ui.scss"></style>
 <style lang="scss" src="./styles/fx.scss"></style>
 <style lang="scss" src="./styles/other.scss"></style>
+<style lang="scss" src="./styles/document.scss"></style>

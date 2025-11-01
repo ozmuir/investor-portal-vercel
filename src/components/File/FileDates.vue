@@ -9,9 +9,9 @@
       <tbody>
         <template
           v-for="item in [
-            ['Created At', formatDateLong(file.created_at)],
-            ['Updated At', formatDateLong(file.updated_at)],
-            ['Last Accessed At', formatDateLong(file.last_accessed_at)],
+            ['Created At', formatDateDefault(file.created_at)],
+            ['Updated At', formatDateDefault(file.updated_at)],
+            ['Last Accessed At', formatDateDefault(file.last_accessed_at)],
           ]"
           :key="item[0]"
         >
@@ -31,5 +31,5 @@ defineProps({ file: Object });
 import { NButton, NIcon, NPopover } from "naive-ui";
 import MyTable from "../../components/Table.vue";
 import { IconInfo } from "../../components/icons.js";
-import { formatDateLong } from "../../utils";
+import { formatDateDefault } from "../../utils";
 </script>

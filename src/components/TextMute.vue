@@ -1,5 +1,5 @@
 <template>
-  <NText depth="3" class="text-small"><slot /></NText>
+  <NText depth="3" class="text-size-sm"><slot /></NText>
 </template>
 
 <script setup>

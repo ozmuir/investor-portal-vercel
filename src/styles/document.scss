@@ -3,13 +3,11 @@
   --eiv-pink: #ff0088;
   --eiv-purple: #7766ff;
   --eiv-cyan: #00ffee;
-  --fx_duration: .5s;
-  --fx_duration_1_2: .25s;
+  --fx_duration: 0.5s;
+  --fx_duration_1_2: 0.25s;
 
   // --font_size_factor: 0.75;
   // font-size: calc(var(--font_size_factor) * (1vw + 1vh));
-
-  line-height: 1.5;
 
   scroll-behavior: smooth;
 
@@ -17,6 +15,15 @@
   --viewport-padding-horizontal: 1rem;
 
   --logo-size: 3rem;
+  --bordered-padding: 1rem;
+
+  --rainbow-intensity: 11;
+  --red: rgb(var(--rainbow-intensity), 0, 0);
+  --yellow: rgb(var(--rainbow-intensity), var(--rainbow-intensity), 0);
+  --green: rgb(0, var(--rainbow-intensity), 0);
+  --cyan: rgb(0, var(--rainbow-intensity), var(--rainbow-intensity));
+  --blue: rgb(0, 0, var(--rainbow-intensity));
+  --magenta: rgb(var(--rainbow-intensity), 0, var(--rainbow-intensity));
 }
 // @media screen and (max-width: 768px) {
 //   :root {

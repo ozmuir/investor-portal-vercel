@@ -21,16 +21,18 @@
     "new_email": "Enter a new email"
   },
   "heading": {
+    "account": "Account Management",
+    "articles": "Orthogonal Ecosystem Updates",
     "investors_portal": "Investor Portal",
     "investment_list": "Your Investments",
     "investor_documents": "Investor Documents",
     "investor_login": "Investor Login",
     "more_actions": "Actions",
-    "account": "Account Management",
-    "request_list": "Support Requests",
-    "news": "Updates"
+    "news": "Updates",
+    "request_list": "Support Requests"
   },
   "empty": {
+    "articles": "No articles found.",
     "documents": "No documents loaded yet.",
     "investments": "No investments found.",
     "requests": "No requests created yet."

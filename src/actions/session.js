@@ -71,6 +71,6 @@ export function useAfter_signOut() {
     } else {
       toast.success(messages.toast.account_signed_out);
     }
-    router.push({ name: ROUTE_INVESTOR_SIGN_IN });
+    router.push({ name: ROUTE_INVESTOR_SIGN_IN }); // change not reflected likel because of my custom router redirects
   };
 }

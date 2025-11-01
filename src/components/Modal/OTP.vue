@@ -1,7 +1,7 @@
 <script setup>
 import { NCard, NForm, NFormItem, NInputOtp, NModal, NText } from "naive-ui";
 import { ref } from "vue";
-import ButtonSubmit from "./Button/ButtonSubmit.vue";
+import ButtonSubmit from "../../components/Button/ButtonSubmit.vue";
 
 const props = defineProps({
   show: { type: Boolean, required: true },

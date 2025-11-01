@@ -1,4 +1,19 @@
+// https://xicons.org/
 export {
+  ArrowRight as IconArrowRight,
+  ArrowUpRight as IconArrowUpRight,
+  ChevronDown as IconDown,
+  ChevronUp as IconUp,
+  Close as IconClose,
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
   ChevronUp as IconAdmin,
   UserAvatar as IconAvatar,
   Information as IconInfo,
@@ -23,4 +38,4 @@ export {
   Document as IconFileTypeDocument,
   DocumentUnknown as IconFileTypeUnknown,
   Copy as IconCopy,
-} from "@vicons/carbon"; // https://xicons.org/
+} from "@vicons/carbon";

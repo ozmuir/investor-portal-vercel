@@ -59,24 +59,42 @@ const _byteFormat = Intl.NumberFormat("en", {
 
 export const formatBytes = (byteSize) => _byteFormat.format(byteSize);
 
-export const formatDateShort = (ISO_8601) =>
+const dateOpts = {
+  year: "numeric",
+  month: "short",
+  day: "2-digit",
+};
+const timeOpts = {
+  hour: "2-digit",
+  minute: "2-digit",
+  // second: "2-digit",
+  hour12: true,
+};
+const timeZoneOpts = {
+  timeZone: "America/New_York",
+  // timeZone: "Pacific/Honolulu",
+  timeZoneName: "short",
+};
+
+export const formatDateOnly = (ISO_8601) =>
   new Date(ISO_8601).toLocaleString("en-US", {
-    // weekday: "long",
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-    // hour: "2-digit",
-    // minute: "2-digit",
-    // second: "2-digit",
-    hour12: true,
-    // timeZoneName: "short",
+    ...dateOpts,
   });
 
-export const formatDateLong = (ISO_8601) =>
+export const formatDateDefault = (ISO_8601) =>
   new Date(ISO_8601).toLocaleString("en-US");
 
+export const formatDateTime = (ISO_8601) =>
+  new Date(ISO_8601).toLocaleString("en-US", {
+    ...dateOpts,
+    ...timeOpts,
+    ...timeZoneOpts,
+  });
+
 export const formatInvestmentName = (invt) =>
-  `${invt.entity_name} - ${invt.invt_name} (${invt.invt_shares || invt.invt_shares_dm} shs)`;
+  `${invt.entity_name} - ${invt.invt_name} (${
+    invt.invt_shares || invt.invt_shares_dm
+  } shs)`;
 
 export const zip = (...rows) =>
   rows[0].map((_, c) => rows.map((row) => row[c]));

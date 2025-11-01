@@ -8,7 +8,7 @@ import {
 import { supabase } from "../actions/supabase";
 import FormButtons from "../components/Button/FormButtons.vue";
 import FeedBack from "../components/FeedBack.vue";
-import OtpModal from "../components/OtpModal.vue";
+import ModalOTP from "./Modal/OTP.vue";
 import messages from "../messages.json";
 import { lock } from "../state/ui";
 
@@ -133,7 +133,7 @@ async function handleOtpSubmit(otp) {
     />
     <FeedBack :success="successRef" :error="errorRef" />
   </NForm>
-  <OtpModal
+  <ModalOTP
     :show="showOtpModalRef"
     @submit="handleOtpSubmit"
     @close="showOtpModalRef = false"
@@ -141,5 +141,5 @@ async function handleOtpSubmit(otp) {
     Please enter the OTP code we just sent you.
     <template #success v-if="otpSuccessRef">{{ otpSuccessRef }}</template>
     <template #error v-if="otpErrorRef">{{ otpErrorRef }}</template>
-  </OtpModal>
+  </ModalOTP>
 </template>

@@ -19,7 +19,7 @@ const navLinkRef = computed(() => {
 </script>
 
 <template>
-  <nav class="navigation">
+  <nav class="navigation flex-gow gap-2">
     <RouterLink v-if="navLinkShow" :to="navLinkRef[0]" class="fx_outline">
       {{ navLinkRef[1] }}
     </RouterLink>
@@ -28,9 +28,7 @@ const navLinkRef = computed(() => {
 
 <style scoped>
 .navigation {
-  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
 }
 </style>

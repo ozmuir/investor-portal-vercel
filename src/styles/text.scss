@@ -1,27 +1,36 @@
-.text-nowrap {
-  white-space: nowrap;
-}
-
-.text-upper {
-  text-transform: uppercase;
-}
-
-.text-small {
+.text-size-sm {
   font-size: 0.8rem;
 }
-.text-normal {
+.text-size-1 {
   font-size: 1rem;
 }
-.text-large {
+.text-size-lg {
   font-size: 1.5rem;
 }
 
-.text-left {
-  text-align: left;
+.text-line-1 {
+  line-height: 1;
 }
-.text-center {
+.text-line-lg {
+  line-height: 1.5;
+}
+.text-line-xlg {
+  line-height: 2;
+}
+
+.text-align-start {
+  text-align: start;
+}
+.text-align-center {
   text-align: center;
 }
-.text-right {
-  text-align: right;
+.text-align-end {
+  text-align: enda;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+.text-upper {
+  text-transform: uppercase;
 }

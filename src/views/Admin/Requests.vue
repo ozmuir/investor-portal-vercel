@@ -37,7 +37,7 @@ import { sessionRef } from "../../state/session.js";
 import { lock } from "../../state/ui.js";
 import $table from "../../styles/table.module.scss";
 import MyTable from "../../components/Table.vue";
-import { formatDateLong } from "../../utils";
+import { formatDateDefault } from "../../utils";
 import { LENGTH_MAX_RESPONSE_NOTE } from "../../variables.js";
 import { renderInvestmentName } from "../../components/render.js";
 
@@ -92,7 +92,7 @@ const pickers = [
       renderEllipsis(request.email),
       renderCopyButton(request.email, { class: "inline" }),
     ]),
-  (request) => formatDateLong(request.created_at),
+  (request) => formatDateDefault(request.created_at),
   (request) =>
     h(RequestStatusSelect, {
       status: request.res_status,

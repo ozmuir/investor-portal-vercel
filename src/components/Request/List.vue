@@ -23,7 +23,7 @@ import {
   requestsLoad,
 } from "../../state/requests";
 import $table from "../../styles/table.module.scss";
-import { formatDateLong } from "../../utils";
+import { formatDateDefault } from "../../utils";
 import { renderInvestmentName } from "../render.js";
 
 const labels = [
@@ -51,8 +51,8 @@ const pickers = [
       ),
       renderCopyButton(request.id, { class: "inline" }),
     ]),
-  (request) => formatDateLong(request.created_at),
-  (request) => formatDateLong(request.updated_at),
+  (request) => formatDateDefault(request.created_at),
+  (request) => formatDateDefault(request.updated_at),
   (request) => h(RequestStatus, { status: request.res_status }),
   (request) =>
     h(

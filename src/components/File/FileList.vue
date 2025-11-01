@@ -62,7 +62,7 @@ import messages from "../../messages.json";
 import { filesRef, filesLoadingRef, filesLoad } from "../../state/files";
 import { lock } from "../../state/ui";
 import $table from "../../styles/table.module.scss";
-import { formatBytes, formatDateLong } from "../../utils";
+import { formatBytes, formatDateDefault } from "../../utils";
 import FeedBack from "../FeedBack.vue";
 import { renderInvestmentName } from "../render";
 
@@ -79,7 +79,7 @@ const pickers = [
     ),
   (file) =>
     h(Fragment, [
-      formatDateLong(file.created_at),
+      formatDateDefault(file.created_at),
       // " ",
       // h(FileDates, { file }),
     ]),
@@ -93,7 +93,7 @@ const pickers = [
         )
       )
     ),
-  (file) => h(NText, { depth: 3, class: "text-small" }, () => file.comment),
+  (file) => h(NText, { depth: 3, class: "text-size-sm" }, () => file.comment),
 ];
 
 onMounted(() => {
