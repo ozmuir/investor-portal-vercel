@@ -114,6 +114,9 @@ export const bodyParser = (req) => {
   return parse(req.url, true).query;
 };
 
+// A real Google Workspace user to authorize as
+const SENDER_USER = "amy@orthogonalthinker.com"
+
 // The sender domain (and preferably, the name) must be as at:
 // https://supabase.com/dashboard/project/_/auth/smtp
 // The sender domain must be authorized at the SMTP provider:
@@ -121,6 +124,7 @@ export const bodyParser = (req) => {
 const SENDER_EMAIL = "investors@orthogonalthinker.com";
 const SENDER_NAME = "Orthogonal Investor Portal";
 const sender = makeAddress(SENDER_EMAIL, SENDER_NAME);
+
 const LABEL_ID = "Investor Portal";
 
 async function sendEmail(
@@ -142,7 +146,7 @@ async function sendEmail(
     threadInfo
   );
 
-  const gmail = await getGmail(SENDER_EMAIL);
+  const gmail = await getGmail(SENDER_USER);
 
   // const insertResponse = await gmail.users.messages.insert({
   //   userId: "me",
