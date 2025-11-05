@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
   const resultRequestSelect = await adminClient
     .from("requests")
-    .select("profile_id, res_status")
+    .select(["short_id", "profile_id", "res_status"].join(","))
     .eq("id", req_id)
     .limit(1)
     .single();
@@ -29,7 +29,11 @@ export default async function handler(req, res) {
     });
     return;
   }
-  const { profile_id, res_status } = resultRequestSelect.data;
+  const {
+    short_id: req_short_id,
+    profile_id,
+    res_status,
+  } = resultRequestSelect.data;
 
   const resultProfileSelect = await adminClient
     .from("profiles")
@@ -60,7 +64,7 @@ export default async function handler(req, res) {
   // SEND MAIL
   const threadInfo = await getThreadInfo(req_id, adminClient);
   const { raw, headers } = await sendEmail_forResponse(
-    { profile, req_id, res_status, res_note },
+    { profile, req_id, req_short_id, res_status, res_note },
     threadInfo
   );
 

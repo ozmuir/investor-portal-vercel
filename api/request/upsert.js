@@ -42,10 +42,16 @@ export default async function handler(req, res) {
     invt_id_: payload.invt_id_,
     file_id_: payload.file_id_,
   };
-  const { data: req_id, error } = await userClient.rpc(
-    "rpc_request_upsert",
-    rpc_args
-  );
+  const {
+    // data: req_id, //
+    data: {
+      id: req_id,
+      short_id: req_short_id,
+      //
+    },
+    error,
+    //
+  } = await userClient.rpc("rpc_request_upsert", rpc_args);
   if (error) {
     res.status(400).json({ error });
     return;
@@ -55,7 +61,7 @@ export default async function handler(req, res) {
 
   // SEND MAIL
   const { raw, headers } = await sendEmail_forRequest(
-    { ...payload, profile, req_id },
+    { ...payload, profile, req_id, req_short_id },
     threadInfo
   );
 

@@ -251,17 +251,17 @@ async function getMessageId(gmail, gmailMessageId) {
 */
 
 export function sendEmail_forRequest(payload, threadInfo = {}) {
-  const { profile, req_id } = payload; // TODO Fetch and attach files
+  const { profile, req_id, req_short_id } = payload; // TODO Fetch and attach files
   const recipient = makeAddress(profile.email, profile.name);
-  const subject = makeSubject(req_id);
+  const subject = makeSubject(req_short_id);
   const [emailHtml, emailText] = requestTemplates(subject, payload);
   return sendEmail(recipient, subject, emailHtml, emailText, threadInfo); // async
 }
 
 export function sendEmail_forResponse(payload, threadInfo = {}) {
-  const { profile, req_id } = payload; // TODO Fetch and attach files
+  const { profile, req_id, req_short_id } = payload; // TODO Fetch and attach files
   const recipient = makeAddress(profile.email, profile.name);
-  const subject = makeSubject(req_id);
+  const subject = makeSubject(req_short_id);
   const [emailHtml, emailText] = responseTemplates(`Re: ${subject}`, payload);
   return sendEmail(recipient, subject, emailHtml, emailText, threadInfo); // async
 }
