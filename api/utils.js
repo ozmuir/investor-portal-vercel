@@ -366,7 +366,7 @@ ${htmlBody}
 </html>
 `;
 
-const template_badge = (key, value) => `[${key.toUpperCase()}: ${value}]`;
+const template_badge = (key, value) => `${key.toUpperCase()}: ${value}`;
 
 const template_margin_html = (text) =>
   `<div style="margin-bottom: 1em">${text}</div>`;
@@ -397,24 +397,24 @@ ${template_heading_text(head_text)}
 ${body_text}
 `;
 
-const template_requestFooter_html = (req_id) => `
+const template_requestFooter_html = (req_short_id) => `
 <hr />
 <div style="font-size: 12px; color: #888;">
-  <div>${template_badge("Request ID", req_id)}</div>
+  <div>${template_badge("Request ID", req_short_id)}</div>
   <div>${REPLY}</div>
 </div>
 `;
 
-const template_requestFooter_text = (req_id) => `
+const template_requestFooter_text = (req_short_id) => `
 -------------------------
-${template_badge("Request ID", req_id)}
+${template_badge("Request ID", req_short_id)}
 
 ${REPLY}
 `;
 
 export const requestTemplates = (
   subject,
-  { req_id, req_summary, req_details, invt_id_, file_id_ }
+  { req_id, req_short_id, req_summary, req_details, invt_id_, file_id_ }
 ) => [
   template_html(
     subject,
@@ -437,7 +437,7 @@ ${
     : ""
 }
 
-${template_requestFooter_html(req_id)}
+${template_requestFooter_html(req_short_id)}
 `
   ),
 
@@ -457,7 +457,7 @@ ${
     : ""
 }
 
-${template_requestFooter_text(req_id)}
+${template_requestFooter_text(req_short_id)}
 `,
 ];
 
