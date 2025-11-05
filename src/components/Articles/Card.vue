@@ -29,7 +29,7 @@ const body = computed(() => (brief ? content.summary : content.body));
           Source&nbsp;<NIcon size="1em"><IconArrowUpRight /></NIcon>
         </a>
       </div>
-      <Heading as="h3">
+      <Heading as="h1">
         <component
           :is="more ? 'button' : 'div'"
           @click="more"

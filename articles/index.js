@@ -80,7 +80,7 @@ async function* map(fn, iterable) {
   const tasks = [];
   await Promise.all([
     advance(investorUpdatesGen, tasks),
-    advance(pressReleasesGen, tasks),
+    // advance(pressReleasesGen, tasks),
   ]);
 
   await Promise.all(tasks);
