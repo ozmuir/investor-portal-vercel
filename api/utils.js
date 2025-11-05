@@ -72,7 +72,7 @@ import { truthy } from "../src/utils/index.js";
 export const makeAddress = (email, name) =>
   [name ? `"${name}"` : "", `<${email}>`].filter(truthy).join(" ");
 
-export const makeSubject = (req_id) => `Support Request [${req_id}][0htka23x]`;
+export const makeSubject = (req_id) => `Support Request [${req_id}]`;
 
 const transporter = nodemailer.createTransport({
   // https://nodemailer.com/transports/stream
