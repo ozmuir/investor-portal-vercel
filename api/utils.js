@@ -115,7 +115,7 @@ export const bodyParser = (req) => {
 };
 
 // A real Google Workspace user to authorize as
-const SENDER_USER = "amy@orthogonalthinker.com"
+const SENDER_USER = "amy@orthogonalthinker.com";
 
 // The sender domain (and preferably, the name) must be as at:
 // https://supabase.com/dashboard/project/_/auth/smtp
@@ -125,7 +125,7 @@ const SENDER_EMAIL = "investors@orthogonalthinker.com";
 const SENDER_NAME = "Orthogonal Investor Portal";
 const sender = makeAddress(SENDER_EMAIL, SENDER_NAME);
 
-const LABEL_ID = "Investor Portal";
+const IP_LABEL_NAME = "Investor Portal";
 
 async function sendEmail(
   recipient,
@@ -156,8 +156,13 @@ async function sendEmail(
   //   },
   // });
 
+  const ipLabelId = await fetchGmailLabelByName(IP_LABEL_NAME, gmail);
+  console.log(ipLabelId);
+
   const threadId = threadInfo.threadId || undefined;
-  const labelIds = [/* "SENT", "UNREAD", */ LABEL_ID]; // CAN NOT add UNREAD this way
+
+  // NOTE: Can not add my labels users.messages.send. Gmail ignores labelIds at this point. Labels can only be applied after sending via users.messages.modify.
+  const labelIds = []; // "SENT", "UNREAD", ipLabelId
 
   // Trying to send with threadId. If it is removed, sending without it.
   const sendResponse = await gmail.users.messages
@@ -173,7 +178,7 @@ async function sendEmail(
           requestBody: { raw, labelIds },
         });
       }
-      if (err.code === 400 && err.message?.includes(LABEL_ID)) {
+      if (err.code === 400 && err.message?.includes(IP_LABEL_NAME)) {
         console.error("Missing or invalid label while sending:", err.message);
         return gmail.users.messages.send({
           userId: "me",
@@ -193,16 +198,23 @@ async function sendEmail(
   // Sometimes label modification needs <.5s cooldown to be effective
   // await sleep(500);
 
-  // Add UNREAD
+  // Add UNREAD and the custom label
   const modifyResponse = await gmail.users.messages.modify({
     userId: "me",
     id: gmailMessageId,
     requestBody: {
-      addLabelIds: ["UNREAD"],
+      addLabelIds: ["UNREAD", ipLabelId],
     },
   });
 
   return { raw, headers };
+}
+
+async function fetchGmailLabelByName(labelName, gmail) {
+  const res = await gmail.users.labels.list({ userId: "me" });
+  const labels = res.data["labels"] || [];
+  const label = labels.find((label) => label.name === labelName);
+  return label?.id || null;
 }
 
 export const emailHeaders = {
@@ -299,7 +311,8 @@ export async function getThreadInfo(req_id, supabase) {
 import { google } from "googleapis";
 
 const { GMAIL_SENDER_KEY_SECRET } = process.env;
-if (!GMAIL_SENDER_KEY_SECRET) throw new Error("GMAIL_SENDER_KEY_SECRET not set.");
+if (!GMAIL_SENDER_KEY_SECRET)
+  throw new Error("GMAIL_SENDER_KEY_SECRET not set.");
 
 const credentials = JSON.parse(
   Buffer.from(GMAIL_SENDER_KEY_SECRET, "base64").toString("utf8")
