@@ -1,12 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 // import { pick } from "rambda";
-import { getAuthenticatedUserIdOr401, getToken } from "../../api/utils.js";
-import { bodyParser, sendEmail_forRequest } from "../../api/utils.js";
 import {
-  createUserClient,
-  emailHeaders,
-  getThreadInfo,
+  getAuthenticatedUserIdOr401,
+  getToken,
+  insertMessage,
 } from "../../api/utils.js";
+import { bodyParser, sendEmail_forRequest } from "../../api/utils.js";
+import { createUserClient, getThreadInfo } from "../../api/utils.js";
 
 // const picker = pick(["req_summary", "req_details", "invt_id_", "file_id_"]);
 
@@ -61,19 +61,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const threadInfo = await getThreadInfo(req_id, userClient);
 
   // SEND MAIL
-  const { raw, headers } = await sendEmail_forRequest(
+  const { rawEmail, headers } = await sendEmail_forRequest(
     { ...payload, profile, req_id, req_short_id },
     threadInfo
   );
 
-  const newMessage = { request_id: req_id, message: raw };
-  for (let col in emailHeaders) newMessage[col] = headers[emailHeaders[col]];
-
-  const { error: messagesError } = await userClient
-    .from("messages")
-    .insert(newMessage);
+  const { error: messagesError } = await insertMessage(
+    req_id,
+    headers,
+    rawEmail,
+    userClient
+  );
   if (messagesError) {
-    console.error("Error inserting a message:", messagesError);
+    console.error("Error inserting message:", messagesError);
+    res.status(400).json({
+      error: `Error inserting message: ${messagesError.message}`,
+    });
+    return;
   }
 
   res.status(200).json({ data: { req_id } });

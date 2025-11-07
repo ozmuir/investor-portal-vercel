@@ -1,11 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getIsAdminOr403 } from "../../api/utils.js";
+import { getIsAdminOr403, insertMessage } from "../../api/utils.js";
 import { bodyParser, sendEmail_forResponse } from "../../api/utils.js";
-import {
-  createAdminClient,
-  emailHeaders,
-  getThreadInfo,
-} from "../../api/utils.js";
+import { createAdminClient, getThreadInfo } from "../../api/utils.js";
 
 // "POST"
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -71,21 +67,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // SEND MAIL
   const threadInfo = await getThreadInfo(req_id, adminClient);
-  const { raw, headers } = await sendEmail_forResponse(
+  const { rawEmail, headers } = await sendEmail_forResponse(
     { profile, req_id, req_short_id, res_status, res_note },
     threadInfo
   );
 
-  const newMessage = { request_id: req_id, message: raw };
-  for (let col in emailHeaders) newMessage[col] = headers[emailHeaders[col]];
-
-  // Insert message
-  const resultMessageInsert = await adminClient
-    .from("messages")
-    .insert(newMessage);
-  if (resultMessageInsert.error) {
+  const { error: messagesError } = await insertMessage(
+    req_id,
+    headers,
+    rawEmail,
+    adminClient
+  );
+  if (messagesError) {
+    console.error("Error inserting message:", messagesError);
     res.status(400).json({
-      error: `Error inserting message: ${resultMessageInsert.error.message}`,
+      error: `Error inserting message: ${messagesError.message}`,
     });
     return;
   }

@@ -1,3 +1,5 @@
+type UUID = string & { readonly brand: unique symbol };
+
 type ThreadInfo = {
   threadId?: string;
   headers?: {
@@ -89,7 +91,10 @@ const transporter = nodemailer.createTransport({
   buffer: true,
 });
 
-export function makeRawEmail(fields, threadInfo: ThreadInfo = {}) {
+export function makeRawEmail(
+  fields,
+  threadInfo: ThreadInfo = {}
+): Promise<string> {
   return new Promise((resolve, reject) => {
     transporter.sendMail(
       {
@@ -136,13 +141,13 @@ const sender = makeAddress(SENDER_EMAIL, SENDER_NAME);
 const IP_LABEL_NAME = "Investor Portal";
 
 async function sendEmail(
-  recipient,
-  subject,
-  emailHtml,
-  emailText,
+  recipient: string,
+  subject: string,
+  emailHtml: string,
+  emailText: string,
   threadInfo: ThreadInfo = {}
 ) {
-  const raw = await makeRawEmail(
+  const rawEmail = await makeRawEmail(
     {
       from: sender,
       to: recipient,
@@ -159,13 +164,12 @@ async function sendEmail(
   // const insertResponse = await gmail.users.messages.insert({
   //   userId: "me",
   //   requestBody: {
-  //     raw,
+  //     rawEmail,
   //     labelIds: ["SENT"],
   //   },
   // });
 
   const ipLabelId = await fetchGmailLabelByName(IP_LABEL_NAME, gmail);
-  console.log(ipLabelId);
 
   const threadId = threadInfo.threadId || undefined;
 
@@ -176,26 +180,29 @@ async function sendEmail(
   const sendResponse = await gmail.users.messages
     .send({
       userId: "me",
-      requestBody: { raw, labelIds, threadId },
+      requestBody: { raw: rawEmail, labelIds, threadId },
     })
     .catch((err) => {
       if (err.code === 404 && threadId) {
         console.error("Missing thread while sending:", err.message);
         return gmail.users.messages.send({
           userId: "me",
-          requestBody: { raw, labelIds },
+          requestBody: { raw: rawEmail, labelIds },
         });
       }
       if (err.code === 400 && err.message?.includes(IP_LABEL_NAME)) {
         console.error("Missing or invalid label while sending:", err.message);
         return gmail.users.messages.send({
           userId: "me",
-          requestBody: { raw, threadId },
+          requestBody: { raw: rawEmail, threadId },
         });
       }
       throw err;
     });
-  const { id: gmailMessageId, threadId: newThreadId } = sendResponse.data;
+  const { data } = sendResponse;
+  // const { id: gmailMessageId, threadId: newThreadId } = sendResponse.data;
+  const gmailMessageId = data.id || "";
+  const newThreadId = data.threadId;
 
   // NOTE: The email is sent at this point. However, do not end
   // the response right away, only do it when everything is finished,
@@ -215,19 +222,23 @@ async function sendEmail(
     },
   });
 
-  return { raw, headers };
+  return { rawEmail, headers };
 }
 
-async function fetchGmailLabelByName(labelName, gmail) {
+async function fetchGmailLabelByName(labelName: string, gmail) {
   const res = await gmail.users.labels.list({ userId: "me" });
   const labels = res.data["labels"] || [];
   const label = labels.find((label) => label.name === labelName);
   return label?.id || null;
 }
 
-export const emailHeaders = {
-  // all the headers needed for the public.messages table
-  // DB column -> Email header
+type EmailHeaders = (typeof colToHeader)[keyof typeof colToHeader];
+type EmailHeadersMapExt = Record<string, string> &
+  Partial<Record<EmailHeaders, string>>;
+
+// NOTE: Sync Vercel <-> Google Cloud Function
+// DB column -> Email header - all the headers needed stored in public.messages
+export const colToHeader = {
   header_from: "From",
   header_to: "To",
   header_date: "Date",
@@ -235,22 +246,28 @@ export const emailHeaders = {
   header_message_id: "Message-ID",
   header_in_reply_to: "In-Reply-To",
   header_references: "References",
-  // the header "X-Gmail-Thread-ID" does not exist, but we will populate the column "gmail_thread_id" manually:
+  // X-Gmail-Thread-ID does not exist on emails, but we will populate gmail_thread_id manually:
   gmail_thread_id: "X-Gmail-Thread-ID",
 };
 
-const getHeaderFromResponse = (name, headers) =>
-  headers.find((h) => h.name.toLowerCase() === name.toLowerCase())?.value;
+const getHeaderFromResponse = (
+  name: string,
+  headers: { name: string; value: string }[]
+) => headers.find((h) => h.name.toLowerCase() === name.toLowerCase())?.value;
 
-async function getMessageHeaders(gmail, gmailMessageId) {
+async function getMessageHeaders(
+  gmail,
+  gmailMessageId
+): Promise<EmailHeadersMapExt> {
   const res = await gmail.users.messages.get({
     userId: "me",
     id: gmailMessageId,
     format: "metadata",
-    metadataHeaders: Object.values(emailHeaders),
+    metadataHeaders: Object.values(colToHeader),
   });
   const { headers } = res.data.payload;
-  const result = Object.values(emailHeaders).reduce((result, name) => {
+
+  const result = Object.values(colToHeader).reduce((result, name) => {
     result[name] = getHeaderFromResponse(name, headers);
     return result;
   }, {});
@@ -286,13 +303,26 @@ export function sendEmail_forResponse(payload, threadInfo = {}) {
   return sendEmail(recipient, subject, emailHtml, emailText, threadInfo); // async
 }
 
+export function insertMessage(
+  request_id: UUID,
+  headers: EmailHeadersMapExt,
+  rawEmail: string,
+  supabaseClient: SupabaseClient
+) {
+  const messageRow = { request_id, message: rawEmail };
+  for (let col in colToHeader) {
+    messageRow[col] = headers[colToHeader[col]];
+  }
+  return supabaseClient.from("messages").insert(messageRow);
+}
+
 export async function getThreadInfo(req_id, supabase): Promise<ThreadInfo> {
   const lastMessageSelect = await supabase
     .from("messages")
     .select("*")
     .eq("request_id", req_id)
     .order("created_at", { ascending: false })
-    .limit(1)
+    .limit(1) // should not be necessary
     .single();
   const lastMessage = lastMessageSelect.data;
   const threadInfo = lastMessage
@@ -336,7 +366,7 @@ function authorize() {
   return new google.auth.GoogleAuth({ credentials, scopes }).getClient(); // async
 }
 
-export async function getGmail(user_email) {
+export async function getGmail(user_email: string) {
   const auth = await authorize();
   auth.subject = user_email;
   return google.gmail({ version: "v1", auth });
@@ -346,7 +376,7 @@ export async function getGmail(user_email) {
 ////////// supabase.js //////////
 //////////////////////////////
 
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 const { SUPABASE_URL } = process.env;
 if (!SUPABASE_URL) throw new Error("SUPABASE_URL not set.");

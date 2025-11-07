@@ -17,8 +17,10 @@ const router = useRouter();
     :class="[
       'heading',
       typeof as === 'string' ? as : '',
-      ['h1', 'h2'].indexOf(as) !== -1 && 'text-line-1',
-      ['h3', 'h4', 'h5', 'h6'].indexOf(as) !== -1 && 'text-line-lg',
+      'h1' === as && 'text-size-lg-3 text-line-base',
+      'h2' === as && 'text-size-lg-2 text-line-base',
+      'h3' === as && 'text-size-lg-1 text-line-lg-1',
+      ['h4', 'h5', 'h6'].indexOf(as) !== -1 && 'text-size-base text-line-lg2',
     ]"
   >
     <slot></slot>
@@ -30,18 +32,18 @@ const router = useRouter();
   margin: 0;
   font-weight: normal;
 }
-.h1 {
-  font-size: 3rem;
-}
-.h2 {
-  font-size: 2rem;
-}
-.h3 {
-  font-size: 1.5rem;
-}
-.h4,
-.h5,
-.h6 {
-  font-size: 1rem;
-}
+// .h1 {
+//   font-size: 2.5rem;
+// }
+// .h2 {
+//   font-size: 2rem;
+// }
+// .h3 {
+//   font-size: 1.5rem;
+// }
+// .h4,
+// .h5,
+// .h6 {
+//   font-size: 1rem;
+// }
 </style>

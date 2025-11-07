@@ -10,7 +10,7 @@ import { lockRef } from "../state/ui";
     class="-root blurrer flex-col gap-1"
   >
     <Loader type="bounce" />
-    <div v-if="typeof lockRef === 'string'" class="text-size-lg">
+    <div v-if="typeof lockRef === 'string'" class="text-size-lg-1">
       {{ lockRef }}
     </div>
   </div>

@@ -93,7 +93,7 @@ const pickers = [
         )
       )
     ),
-  (file) => h(NText, { depth: 3, class: "text-size-sm" }, () => file.comment),
+  (file) => h(NText, { depth: 3, class: "text-size-sm-1" }, () => file.comment),
 ];
 
 onMounted(() => {

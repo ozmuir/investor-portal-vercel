@@ -1,21 +1,30 @@
-.text-size-sm {
+.text-size-sm-1 {
   font-size: 0.8rem;
 }
-.text-size-1 {
+.text-size-base {
   font-size: 1rem;
 }
-.text-size-lg {
+.text-size-lg-1 {
   font-size: 1.5rem;
 }
+.text-size-lg-2 {
+  font-size: 2rem;
+}
+.text-size-lg-3 {
+  font-size: 2.5rem;
+}
 
-.text-line-1 {
+.text-line-base {
   line-height: 1;
 }
-.text-line-lg {
+.text-line-lg-1 {
+  line-height: 1.25;
+}
+.text-line-lg-2 {
   line-height: 1.5;
 }
-.text-line-xlg {
-  line-height: 2;
+.text-line-lg-2 {
+  line-height: 1.75;
 }
 
 .text-align-start {

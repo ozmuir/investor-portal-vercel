@@ -108,7 +108,7 @@ onMounted(() => {
                   <div class="flex-col">
                     <component :is="renderInvestmentName(investment)" />
                   </div>
-                  <div class="text-size-sm muted">
+                  <div class="text-size-sm-1 muted">
                     <span class="inline valign-middle">ID: </span>
                     <b class="inline valign-middle">
                       <Ellipsis class="inline valign-middle">
@@ -142,7 +142,7 @@ onMounted(() => {
           </template>
         </tbody>
       </MyTable>
-      <div class="text-size-sm muted">
+      <div class="text-size-sm-1 muted">
         <b>Note:</b> The address and phone number on the investments cannot be
         changed at this time. However, you can provide a new address and phone
         number in
