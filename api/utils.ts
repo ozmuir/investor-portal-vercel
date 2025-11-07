@@ -1,3 +1,11 @@
+type ThreadInfo = {
+  threadId?: string;
+  headers?: {
+    "In-Reply-To": string;
+    References: string;
+  };
+};
+
 export const sleep = (timeout) =>
   new Promise((resolve, reject) => setTimeout(resolve, timeout));
 
@@ -81,7 +89,7 @@ const transporter = nodemailer.createTransport({
   buffer: true,
 });
 
-export function makeRawEmail(fields, threadInfo = {}) {
+export function makeRawEmail(fields, threadInfo: ThreadInfo = {}) {
   return new Promise((resolve, reject) => {
     transporter.sendMail(
       {
@@ -132,7 +140,7 @@ async function sendEmail(
   subject,
   emailHtml,
   emailText,
-  threadInfo = {}
+  threadInfo: ThreadInfo = {}
 ) {
   const raw = await makeRawEmail(
     {
@@ -278,7 +286,7 @@ export function sendEmail_forResponse(payload, threadInfo = {}) {
   return sendEmail(recipient, subject, emailHtml, emailText, threadInfo); // async
 }
 
-export async function getThreadInfo(req_id, supabase) {
+export async function getThreadInfo(req_id, supabase): Promise<ThreadInfo> {
   const lastMessageSelect = await supabase
     .from("messages")
     .select("*")

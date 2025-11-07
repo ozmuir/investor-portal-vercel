@@ -1,3 +1,4 @@
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getIsAdminOr403 } from "../../api/utils.js";
 import { bodyParser, sendEmail_forResponse } from "../../api/utils.js";
 import {
@@ -7,7 +8,7 @@ import {
 } from "../../api/utils.js";
 
 // "POST"
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!getIsAdminOr403(req, res)) {
     return;
   }
@@ -19,7 +20,14 @@ export default async function handler(req, res) {
 
   const resultRequestSelect = await adminClient
     .from("requests")
-    .select(["short_id", "profile_id", "res_status"].join(","))
+    .select(
+      [
+        "short_id",
+        "profile_id",
+        "res_status",
+        //
+      ].join(",")
+    )
     .eq("id", req_id)
     .limit(1)
     .single();

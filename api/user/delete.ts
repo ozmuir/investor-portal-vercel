@@ -1,8 +1,9 @@
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getAuthenticatedUserIdOr401 } from "../../api/utils.js";
 import { createAdminClient } from "../../api/utils.js";
 
 // "POST"
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   const userId = await getAuthenticatedUserIdOr401(req, res);
   if (!userId) {
     return;

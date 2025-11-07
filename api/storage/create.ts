@@ -1,9 +1,10 @@
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getIsAdminOr403 } from "../../api/utils.js";
 import { createAdminClient } from "../../api/utils.js";
 import { BUCKET, ACCEPT_TYPE } from "../../src/variables.js";
 
 // "POST"
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!getIsAdminOr403(req, res)) {
     return;
   }

@@ -1,3 +1,4 @@
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 // import { pick } from "rambda";
 import { getAuthenticatedUserIdOr401, getToken } from "../../api/utils.js";
 import { bodyParser, sendEmail_forRequest } from "../../api/utils.js";
@@ -10,7 +11,7 @@ import {
 // const picker = pick(["req_summary", "req_details", "invt_id_", "file_id_"]);
 
 // "POST"
-export default async function handler(req, res) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   const user_id = await getAuthenticatedUserIdOr401(req, res);
   if (!user_id) {
     return;
