@@ -10,6 +10,7 @@ const PATH_REQUEST_NEW = `${PATH_REQUEST_LIST}/new`;
 const PATH_REQUEST_EDIT = `${PATH_REQUEST_LIST}/:request_id`;
 const PATH_ADMIN = `${PATH_INVESTOR}/admin`;
 const PATH_ADMIN_REQUESTS = `${PATH_ADMIN}/requests`;
+const PATH_TEST = `${PATH_INVESTOR}/test`;
 
 export const ROUTE_NOT_FOUND = "Not Found";
 export const ROUTE_HOME = "Home";
@@ -23,6 +24,7 @@ export const ROUTE_FILE_NEW = "Upload Documents";
 export const ROUTE_REQUEST_LIST = "Requests";
 export const ROUTE_REQUEST_NEW = "Create request";
 export const ROUTE_REQUEST_EDIT = "Edit request";
+export const ROUTE_TEST = "Test";
 
 export const ROUTE_ADMIN_REQUESTS = "Admin | Requests";
 
@@ -39,6 +41,7 @@ import ViewRequestEdit from "../views/Request/Edit.vue";
 import ViewRequestList from "../views/Request/List.vue";
 import ViewRequestNew from "../views/Request/New.vue";
 import ViewSignIn from "../views/SignIn.vue";
+import ViewTest from "../views/Test.vue";
 import messages from "../messages.json";
 import { truthy } from "../utils/index.js";
 import { ENTITY_EI, ENTITY_OT } from "../variables.js";
@@ -55,6 +58,8 @@ export default [
       // title: messages.meta.title.home,
       title: withSuffix(messages.meta.title.investors_portal),
       // Layout: LayoutHomePage,
+      redirectOnSession: null,
+      redirectOnNoSession: null,
     },
   },
   {
@@ -63,6 +68,8 @@ export default [
     component: ViewHome,
     meta: {
       title: withSuffix(messages.meta.title.investors_portal),
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
     },
   },
   {
@@ -71,6 +78,8 @@ export default [
     component: ViewSignIn,
     meta: {
       title: withSuffix(messages.meta.title.investor_login),
+      redirectOnSession: ROUTE_INVESTOR,
+      redirectOnNoSession: null,
     },
   },
   {
@@ -79,6 +88,8 @@ export default [
     component: ViewSettings,
     meta: {
       title: withSuffix(messages.meta.title.investor_account),
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
     },
   },
   {
@@ -87,6 +98,8 @@ export default [
     component: ViewInvestmentList,
     meta: {
       title: withSuffix(messages.meta.title.investor_investments),
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
     },
   },
   {
@@ -95,6 +108,8 @@ export default [
     component: ViewFileList,
     meta: {
       title: withSuffix(messages.meta.title.investor_documents),
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
     },
   },
   {
@@ -103,6 +118,8 @@ export default [
     component: ViewFileNew,
     meta: {
       title: withSuffix(messages.meta.title.investor_documents_upload),
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
     },
   },
   {
@@ -111,6 +128,8 @@ export default [
     component: ViewRequestList,
     meta: {
       title: withSuffix(messages.meta.title.investor_requests),
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
     },
   },
   {
@@ -119,6 +138,8 @@ export default [
     component: ViewRequestNew,
     meta: {
       title: withSuffix(messages.meta.title.investor_requests_new),
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
     },
   },
   {
@@ -127,12 +148,27 @@ export default [
     component: ViewRequestEdit,
     meta: {
       title: withSuffix(messages.meta.title.investor_requests_edit),
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
     },
   },
   {
     path: PATH_ADMIN_REQUESTS,
     name: ROUTE_ADMIN_REQUESTS,
     component: ViewAdminRequests,
+    meta: {
+      redirectOnSession: null,
+      redirectOnNoSession: ROUTE_INVESTOR_SIGN_IN,
+    }
+  },
+  {
+    path: PATH_TEST,
+    name: ROUTE_TEST,
+    component: ViewTest,
+    meta: {
+      redirectOnSession: null,
+      redirectOnNoSession: null,
+    }
   },
   {
     path: "/:pathMatch(.*)*",

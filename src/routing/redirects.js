@@ -9,16 +9,17 @@ export default function setupRedirects(router) {
       // console.log("No redirect until the session is resolved");
       return;
     }
-    const name = route.name;
+    const {
+      name,
+      meta: { redirectOnSession, redirectOnNoSession },
+    } = route;
     if (!_session) {
-      if (name !== ROUTE_INVESTOR_SIGN_IN && name !== ROUTE_HOME) {
-        // console.log("Redirect to", ROUTE_INVESTOR_SIGN_IN);
-        return { name: ROUTE_INVESTOR_SIGN_IN };
+      if (redirectOnNoSession) {
+        return { name: redirectOnNoSession };
       }
     } else {
-      if (name === ROUTE_INVESTOR_SIGN_IN) {
-        // console.log("Redirect to", ROUTE_INVESTOR);
-        return { name: ROUTE_INVESTOR };
+      if (redirectOnSession) {
+        return { name: redirectOnSession };
       }
     }
   };

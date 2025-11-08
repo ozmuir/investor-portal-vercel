@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getIsAdminOr403, insertMessage } from "../../api/utils.js";
 import { bodyParser, sendEmail_forResponse } from "../../api/utils.js";
 import { createAdminClient, getThreadInfo } from "../../api/utils.js";
+// import { createConversation } from "../../api-utils/helpscout/conversation.ts";
 
 // "POST"
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -53,7 +54,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   const profile = resultProfileSelect.data;
 
-  // Update request
   const resultRequestUpdate = await adminClient
     .from("requests")
     .update({ res_note })
@@ -64,6 +64,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
     return;
   }
+
+  // await createConversation({
+  //   //
+  // });
 
   // SEND MAIL
   const threadInfo = await getThreadInfo(req_id, adminClient);
@@ -87,4 +91,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   res.status(200).json({ data: { req_id } });
+  return;
 }

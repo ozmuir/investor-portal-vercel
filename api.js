@@ -9,26 +9,29 @@ function addRoute(method, path, handler) {
   routes[key] = handler;
 }
 
-import deleteUser from "./api/user/delete.js";
-addRoute("POST", "/api/user/delete", deleteUser);
+import testHandler from "./api/test.js";
+addRoute("POST", "/api/test", testHandler);
 
-import createBucket from "./api/storage/create.js";
-addRoute("POST", "/api/storage/create", createBucket);
+// import deleteUser from "./api/user/delete.js";
+// addRoute("POST", "/api/user/delete", deleteUser);
 
-import requestUpsert from "./api/request/upsert.js";
-addRoute("POST", "/api/request/upsert", requestUpsert);
+// import createBucket from "./api/storage/create.js";
+// addRoute("POST", "/api/storage/create", createBucket);
 
-import requestResponse from "./api/request/response.js";
-addRoute("POST", "/api/request/response", requestResponse);
+// import requestUpsert from "./api/request/upsert.js";
+// addRoute("POST", "/api/request/upsert", requestUpsert);
 
-import requestStatus from "./api/request/status.js";
-addRoute("POST", "/api/request/status", requestStatus);
+// import requestResponse from "./api/request/response.js";
+// addRoute("POST", "/api/request/response", requestResponse);
 
-import listRequests from "./api/request/list.js";
-addRoute("GET", "/api/request/list", listRequests);
+// import requestStatus from "./api/request/status.js";
+// addRoute("POST", "/api/request/status", requestStatus);
 
-import signedUrl from "./api/storage/signed_url.js";
-addRoute("GET", "/api/storage/signed_url", signedUrl);
+// import listRequests from "./api/request/list.js";
+// addRoute("GET", "/api/request/list", listRequests);
+
+// import signedUrl from "./api/storage/signed_url.js";
+// addRoute("GET", "/api/storage/signed_url", signedUrl);
 
 function enhanceRes(res) {
   res.status = function (code) {
