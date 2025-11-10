@@ -4,8 +4,8 @@ import { getAuthenticatedUserIdOr401, getToken } from "../../api-lib/auth.ts";
 import {
   bodyParser,
   sendEmail_forRequest,
-  getThreadInfo,
-  insertMessage,
+  // getThreadInfo,
+  // insertMessage,
 } from "../../api-lib/email.ts";
 import { createUserClient } from "../../api-lib/supabase.ts";
 
@@ -59,27 +59,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  const threadInfo = await getThreadInfo(req_id, userClient);
+  // const threadInfo = await getThreadInfo(req_id, userClient);
 
   // SEND MAIL
   const { rawEmail, headers } = await sendEmail_forRequest(
     { ...payload, profile, req_id, req_short_id },
-    threadInfo
+    // threadInfo
   );
 
-  const { error: messagesError } = await insertMessage(
-    req_id,
-    headers,
-    rawEmail,
-    userClient
-  );
-  if (messagesError) {
-    console.error("Error inserting message:", messagesError);
-    res.status(400).json({
-      error: `Error inserting message: ${messagesError.message}`,
-    });
-    return;
-  }
+  // const { error: messagesError } = await insertMessage(
+  //   req_id,
+  //   headers,
+  //   rawEmail,
+  //   userClient
+  // );
+  // if (messagesError) {
+  //   console.error("Error inserting message:", messagesError);
+  //   res.status(400).json({
+  //     error: `Error inserting message: ${messagesError.message}`,
+  //   });
+  //   return;
+  // }
 
   res.status(200).json({ data: { req_id } });
 }

@@ -238,41 +238,41 @@ export function sendEmail_forResponse(payload, threadInfo = {}) {
   return sendEmail(recipient, subject, emailHtml, emailText, threadInfo); // async
 }
 
-export function insertMessage(
-  request_id: UUID,
-  headers: EmailHeadersMapExt,
-  rawEmail: string,
-  supabaseClient: SupabaseClient
-) {
-  const messageRow = { request_id, message: rawEmail };
-  for (let col in colToHeader) {
-    messageRow[col] = headers[colToHeader[col]];
-  }
-  return supabaseClient.from("messages").insert(messageRow);
-}
+// export function insertMessage(
+//   request_id: UUID,
+//   headers: EmailHeadersMapExt,
+//   rawEmail: string,
+//   supabaseClient: SupabaseClient
+// ) {
+//   const messageRow = { request_id, message: rawEmail };
+//   for (let col in colToHeader) {
+//     messageRow[col] = headers[colToHeader[col]];
+//   }
+//   return supabaseClient.from("messages").insert(messageRow);
+// }
 
-export async function getThreadInfo(req_id, supabase): Promise<ThreadInfo> {
-  const lastMessageSelect = await supabase
-    .from("messages")
-    .select("*")
-    .eq("request_id", req_id)
-    .order("created_at", { ascending: false })
-    .limit(1) // should not be necessary
-    .single();
-  const lastMessage = lastMessageSelect.data;
-  const threadInfo = lastMessage
-    ? {
-        threadId: lastMessage.gmail_thread_id,
-        headers: {
-          "In-Reply-To": lastMessage.header_message_id,
-          References: [
-            lastMessage.header_references,
-            lastMessage.header_message_id,
-          ]
-            .filter((it) => !!it)
-            .join(" "),
-        },
-      }
-    : {};
-  return threadInfo;
-}
+// export async function getThreadInfo(req_id, supabase): Promise<ThreadInfo> {
+//   const lastMessageSelect = await supabase
+//     .from("messages")
+//     .select("*")
+//     .eq("request_id", req_id)
+//     .order("created_at", { ascending: false })
+//     .limit(1) // should not be necessary
+//     .single();
+//   const lastMessage = lastMessageSelect.data;
+//   const threadInfo = lastMessage
+//     ? {
+//         threadId: lastMessage.gmail_thread_id,
+//         headers: {
+//           "In-Reply-To": lastMessage.header_message_id,
+//           References: [
+//             lastMessage.header_references,
+//             lastMessage.header_message_id,
+//           ]
+//             .filter((it) => !!it)
+//             .join(" "),
+//         },
+//       }
+//     : {};
+//   return threadInfo;
+// }

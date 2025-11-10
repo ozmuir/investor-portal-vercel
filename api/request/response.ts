@@ -3,8 +3,8 @@ import { getIsAdminOr403 } from "../../api-lib/auth.ts";
 import {
   bodyParser,
   sendEmail_forResponse,
-  insertMessage,
-  getThreadInfo,
+  // insertMessage,
+  // getThreadInfo,
 } from "../../api-lib/email.ts";
 import { createAdminClient } from "../../api-lib/supabase.ts";
 // import { createConversation } from "../../api-lib/helpscout/conversation.ts";
@@ -70,30 +70,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  // await createConversation({
+  // const data = await createConversation({
   //   //
   // });
 
   // SEND MAIL
-  const threadInfo = await getThreadInfo(req_id, adminClient);
+  // const threadInfo = await getThreadInfo(req_id, adminClient);
   const { rawEmail, headers } = await sendEmail_forResponse(
     { profile, req_id, req_short_id, res_status, res_note },
-    threadInfo
+    // threadInfo
   );
 
-  const { error: messagesError } = await insertMessage(
-    req_id,
-    headers,
-    rawEmail,
-    adminClient
-  );
-  if (messagesError) {
-    console.error("Error inserting message:", messagesError);
-    res.status(400).json({
-      error: `Error inserting message: ${messagesError.message}`,
-    });
-    return;
-  }
+  // const { error: messagesError } = await insertMessage(
+  //   req_id,
+  //   headers,
+  //   rawEmail,
+  //   adminClient
+  // );
+  // if (messagesError) {
+  //   console.error("Error inserting message:", messagesError);
+  //   res.status(400).json({
+  //     error: `Error inserting message: ${messagesError.message}`,
+  //   });
+  //   return;
+  // }
 
   res.status(200).json({ data: { req_id } });
   return;
