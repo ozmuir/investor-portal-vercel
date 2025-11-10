@@ -1,13 +1,4 @@
 <script setup>
-import {
-  IconAdmin,
-  IconAvatar,
-  IconDocument,
-  IconRequest,
-  IconLogout,
-  IconInvestment,
-  IconEdit,
-} from "../components/icons.js";
 import { NAvatar, NButton, NDropdown, NIcon, NText } from "naive-ui";
 import { h } from "vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";

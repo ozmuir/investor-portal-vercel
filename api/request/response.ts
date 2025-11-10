@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getIsAdminOr403, insertMessage } from "../../api/utils.js";
 import { bodyParser, sendEmail_forResponse } from "../../api/utils.js";
 import { createAdminClient, getThreadInfo } from "../../api/utils.js";
-// import { createConversation } from "../../api-utils/helpscout/conversation.ts";
+// import { createConversation } from "../../api-lib/helpscout/conversation.ts";
 
 // "POST"
 export default async function handler(req: VercelRequest, res: VercelResponse) {

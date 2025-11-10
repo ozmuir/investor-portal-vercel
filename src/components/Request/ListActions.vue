@@ -35,7 +35,7 @@
 //   handleFilesDelete: Function,
 // });
 // import { IconDelete } from "../../components/icons";
-import { NButton, NButtonGroup, NIcon, NPopconfirm } from "naive-ui";
+import { NButtonGroup } from "naive-ui";
 // import { ref } from "vue";
 // import ButtonButton from "../components/Button/ButtonButton";
 

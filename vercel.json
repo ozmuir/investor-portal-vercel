@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/**/*": {
+      "includeFiles": "api-lib/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/investor/:file(.*\\..*)",

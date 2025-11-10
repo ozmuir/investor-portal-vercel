@@ -1,5 +1,4 @@
 import { supabase } from "../actions/supabase";
-import { ROUTE_HOME, ROUTE_INVESTOR, ROUTE_INVESTOR_SIGN_IN } from "../routing";
 
 export default function setupRedirects(router) {
   let _session;

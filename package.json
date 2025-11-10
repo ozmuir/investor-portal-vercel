@@ -5,17 +5,22 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "type": "module",
   "engines": {
     "node": "22.x"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",
     "@vicons/carbon": "^0.13.0",
+    "axios": "^1.13.2",
     "core-js": "^3.30.2",
     "ethers": "^6.15.0",
     "googleapis": "^152.0.0",
+    "jose": "^6.0.11",
+    "micro": "^10.0.1",
     "modern-normalize": "^3.0.1",
     "naive-ui": "^2.41.1",
+    "nodemailer": "^7.0.5",
     "rambda": "^10.2.0",
     "vue": "^3.3.4",
     "vue-router": "^4.5.1",

@@ -137,21 +137,3 @@ export async function requestNewToken() {
   );
   return res.data as TokenObject;
 }
-
-/* Example usage with Axios:
-import axios from "axios";
-import { createHelpScoutAuth, requestNewToken } from "./helpscout-auth.js";
-
-const { HELPSCOUT_MAILBOX_ID } = process.env;
-if (!HELPSCOUT_MAILBOX_ID) throw new Error("HELPSCOUT_MAILBOX_ID not set.");
-
-const withAuth = createHelpScoutAuth(requestNewToken);
-
-const data = await withAuth(async (token) => {
-  const res = await axios.get("https://api.helpscout.net/v2/conversations", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  return res.data;
-});
-console.log(data);
-*/

@@ -42,8 +42,7 @@
 <script setup>
 defineOptions({ name: "V_Account" });
 
-import { IconCopy } from "../components/icons";
-import { NButton, NCard, NIcon, NTag, useMessage } from "naive-ui";
+import { NCard, NTag } from "naive-ui";
 import EmailChangeForm from "../components/EmailChangeForm.vue";
 import Loader from "../components/Loader";
 import ProfileForm from "../components/ProfileForm.vue";
@@ -52,8 +51,5 @@ import Heading from "../components/Heading";
 import messages from "../messages.json";
 import { sessionRef } from "../state/session";
 import { ROUTE_INVESTOR } from "../routing";
-import { useClipboard } from "../utils/useClipboard";
 import CopyButton from "../components/Button/CopyButton.vue";
-
-const copyToClipboard = useClipboard();
 </script>
