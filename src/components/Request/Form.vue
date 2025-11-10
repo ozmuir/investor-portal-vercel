@@ -71,18 +71,20 @@ import { NForm, NFormItem, NInput } from "naive-ui";
 import { onMounted, ref } from "vue";
 import { requestUpdateOrCreate } from "../../actions/data.js";
 import { supabase } from "../../actions/supabase.js";
-import FilePicker from "../../components/File/FilePicker";
+import FilePicker from "../../components/File/FilePicker.vue";
 import FeedBack from "../../components/FeedBack.vue";
-import InvestmentPicker from "../../components/Investment/InvestmentPicker";
-import FormButtons from "../../components/Button/FormButtons";
+import InvestmentPicker from "../../components/Investment/InvestmentPicker.vue";
+import FormButtons from "../../components/Button/FormButtons.vue";
 import messages from "../../messages.json";
-import { lock } from "../../state/ui";
+import { lock } from "../../state/ui.js";
 import {
   LENGTH_MIN_REQUEST_SUMMARY,
   LENGTH_MAX_REQUEST_SUMMARY,
   LENGTH_MIN_REQUEST_DETAILS,
   LENGTH_MAX_REQUEST_DETAILS,
 } from "../../variables.js";
+// import type { RequestPlusRow } from "../../../api-lib/base.js";
+// import { PostgrestError } from "@supabase/supabase-js";
 
 const successRef = ref("");
 const errorRef = ref("");
@@ -90,14 +92,17 @@ const errorRef = ref("");
 const enabledRef = ref(true);
 const visibleRef = ref(true);
 
+// import type { FormInst } from "naive-ui";
+// const formRef = ref<FormInst | null>(null);
 const formRef = ref(null);
 
+// const createModel = (params?: RequestPlusRow) => ({
 const createModel = (params) => ({
   id: params?.id,
   req_summary: params?.req_summary || "",
   req_details: params?.req_details || "",
-  invt_id_: params?.invt_id_ || [],
-  file_id_: params?.file_id_ || [],
+  invt_id_: params?.investments.map((it) => it.id) || [],
+  file_id_: params?.files.map((it) => it.id) || [],
 });
 
 const modelRef = ref(createModel());
@@ -110,7 +115,7 @@ onMounted(async () => {
       .select("*")
       .eq("id", request_id)
       .limit(1)
-      .single();
+      .single(); // as { data: RequestPlusRow; error: PostgrestError | null };
     if (error) {
       console.error("Error loading the request:", error.message);
       successRef.value = "";

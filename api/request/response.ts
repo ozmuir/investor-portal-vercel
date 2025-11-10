@@ -7,7 +7,8 @@ import {
   // getThreadInfo,
 } from "../../api-lib/email.ts";
 import { createAdminClient } from "../../api-lib/supabase.ts";
-// import { createConversation } from "../../api-lib/helpscout/conversation.ts";
+import { Profile } from "../../api-lib/base.ts";
+// import { startConversation } from "../../api-lib/helpscout/conversation.ts";
 
 // "POST"
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -57,7 +58,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
     return;
   }
-  const profile = resultProfileSelect.data;
+  const profile = resultProfileSelect.data as Profile;
 
   const resultRequestUpdate = await adminClient
     .from("requests")
@@ -70,14 +71,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  // const data = await createConversation({
+  // const data = await startConversation({
   //   //
   // });
 
   // SEND MAIL
   // const threadInfo = await getThreadInfo(req_id, adminClient);
   const { rawEmail, headers } = await sendEmail_forResponse(
-    { profile, req_id, req_short_id, res_status, res_note },
+    { profile, req_id, req_short_id, res_status, res_note }
     // threadInfo
   );
 

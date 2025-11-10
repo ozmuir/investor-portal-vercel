@@ -1,8 +1,6 @@
 import nodemailer from "nodemailer";
-import { truthy } from "../src/utils/index.js";
 import { getGmail } from "./google.ts";
-
-type UUID = string & { readonly brand: unique symbol };
+import { makeAddress, SENDER_EMAIL, SENDER_NAME, SENDER_USER } from "./base.ts";
 
 type ThreadInfo = {
   threadId?: string;
@@ -11,8 +9,6 @@ type ThreadInfo = {
     References: string;
   };
 };
-
-import { makeAddress } from "./base.ts";
 
 export const makeSubject = (req_id: string) => `Support Request [${req_id}]`;
 
@@ -62,15 +58,6 @@ export const bodyParser = (req) => {
   return parse(req.url, true).query;
 };
 
-// A real Google Workspace user to authorize as
-const SENDER_USER = "amy@orthogonalthinker.com";
-
-// The sender domain (and preferably, the name) must be as at:
-// https://supabase.com/dashboard/project/_/auth/smtp
-// The sender domain must be authorized at the SMTP provider:
-// https://app.mailersend.com/domains/65qngkdvxwolwr12
-const SENDER_EMAIL = "investors@orthogonalthinker.com";
-const SENDER_NAME = "Orthogonal Investor Portal";
 const sender = makeAddress(SENDER_EMAIL, SENDER_NAME);
 
 const IP_LABEL_NAME = "Investor Portal";

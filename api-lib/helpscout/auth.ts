@@ -101,9 +101,9 @@ async function refreshNow(getNewToken: typeof requestNewToken) {
 }
 
 export function createHelpScoutAuth(getNewToken: typeof requestNewToken) {
-  return async function withHelpScoutAuth(
-    fn: (access_token: AccessToken) => unknown
-  ) {
+  return async function withHelpScoutAuth<T>(
+    fn: (access_token: AccessToken) => Promise<T>
+  ): Promise<T> {
     let { access_token } = await ensureToken(getNewToken);
     try {
       return await fn(access_token);

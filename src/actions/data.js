@@ -47,7 +47,7 @@ export const requestUpdateOrCreate = async (values) => {
     );
   } else {
     console.log(
-      values.id ? "Updated the request:" : "Created the request:",
+      values.id ? "Request updated:" : "Request created:",
       data
     );
   }
