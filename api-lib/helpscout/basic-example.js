@@ -1,6 +1,7 @@
-import fs from "node:fs/promises";
-import util from "util";
 import axios from "axios";
+import fs from "node:fs/promises";
+import { inspect } from "../base.ts";
+import { helpscoutEndpoint } from "./base.ts";
 
 const { HELPSCOUT_MAILBOX_ID } = process.env;
 if (!HELPSCOUT_MAILBOX_ID) throw new Error("HELPSCOUT_MAILBOX_ID not set.");
@@ -15,10 +16,6 @@ const PATH = "./~helpscout.json";
 
 const SENDER_NAME = "Orthogonal Investor Portal";
 const SENDER_EMAIL = "investors@orthogonalthinker.com";
-
-const helpscoutEndpoint = (path) => `https://api.helpscout.net${path}`;
-
-const inspect = (obj) => util.inspect(obj, { depth: null, colors: true });
 
 export async function createConversation({ subject, recipient } = {}) {
   const tokenData = await getTokenData();

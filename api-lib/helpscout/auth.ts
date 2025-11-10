@@ -1,9 +1,10 @@
 import axios from "axios";
+import fsSync from "node:fs";
 import fs from "node:fs/promises";
-import { open as fsOpen, close as fsClose } from "node:fs";
 import path from "node:path";
 import { setTimeout as wait } from "node:timers/promises";
-import { helpscoutEndpoint, inspect } from "./base.js";
+import { helpscoutEndpoint } from "./base.ts";
+import { inspect } from "../base.ts";
 
 const { HELPSCOUT_ACCESS_KEY } = process.env;
 if (!HELPSCOUT_ACCESS_KEY) throw new Error("HELPSCOUT_ACCESS_KEY not set.");
@@ -41,7 +42,7 @@ const lock = async (timeoutMs = 5000, pollMs = 50) => {
   while (true) {
     try {
       const fd = await new Promise<number>((res, rej) =>
-        fsOpen(LOCK_FILE, "wx", 0o600, (e, fd) => (e ? rej(e) : res(fd)))
+        fsSync.open(LOCK_FILE, "wx", 0o600, (e, fd) => (e ? rej(e) : res(fd)))
       );
       await fs.writeFile(LOCK_FILE, String(process.pid));
       return async () => {
@@ -49,7 +50,7 @@ const lock = async (timeoutMs = 5000, pollMs = 50) => {
           await fs.unlink(LOCK_FILE);
         } catch {}
         try {
-          fsClose(fd);
+          fsSync.close(fd);
         } catch {}
       };
     } catch {

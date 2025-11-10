@@ -1,9 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import {
-  bodyParser,
-  getIsAdminOr403,
-  createAdminClient,
-} from "../../api/utils.js";
+import { getIsAdminOr403 } from "../../api-lib/auth.ts";
+import { bodyParser } from "../../api-lib/email.ts";
+import { createAdminClient } from "../../api-lib/supabase.ts";
 
 // "POST"
 export default async function handler(req: VercelRequest, res: VercelResponse) {

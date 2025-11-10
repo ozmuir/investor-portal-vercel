@@ -1,3 +1,7 @@
+import nodemailer from "nodemailer";
+import { truthy } from "../src/utils/index.js";
+import { getGmail } from "./google.ts";
+
 type UUID = string & { readonly brand: unique symbol };
 
 type ThreadInfo = {
@@ -8,81 +12,9 @@ type ThreadInfo = {
   };
 };
 
-export const sleep = (timeout) =>
-  new Promise((resolve, reject) => setTimeout(resolve, timeout));
+import { makeAddress } from "./base.ts";
 
-//////////////////////////////
-////////// auth.js //////////
-//////////////////////////////
-
-import { jwtVerify } from "jose";
-
-const { SUPABASE_JWT_SECRET } = process.env;
-if (!SUPABASE_JWT_SECRET) throw new Error("SUPABASE_JWT_SECRET not set.");
-
-const secret = new TextEncoder().encode(SUPABASE_JWT_SECRET);
-
-export const getToken = (req) => req.headers.authorization?.split(" ")[1];
-
-export const verify = async (accessToken) => {
-  const { payload } = await jwtVerify(accessToken, secret);
-  return payload.sub;
-};
-
-/*
-export const verifyRequest = async (req) => {
-  return verify(getToken(req));
-};
-*/
-
-export const getAuthenticatedUserIdOr401 = async (req, res) => {
-  const accessToken = getToken(req);
-  let userId;
-  try {
-    return verify(accessToken); // async
-  } catch (err) {
-    res.status(401).json({ error: err.message });
-    return false;
-  }
-};
-
-export const getIsAdminOr403 = async (req, res) => {
-  const userId = await getAuthenticatedUserIdOr401(req, res);
-  if (!userId) {
-    return false;
-  }
-
-  const accessToken = getToken(req);
-  const userClient = createUserClient(accessToken);
-
-  const profileSelect = await userClient
-    .from("profiles")
-    .select("is_admin")
-    .eq("user_id", userId) // IMPORTANT if using *ADMIN* client here
-    .limit(1)
-    .single();
-  if (profileSelect.error) {
-    res.status(400).json({ error: profileSelect.error.message });
-    return false;
-  }
-  if (profileSelect.data.is_admin !== true) {
-    res.status(403).json({ error: "Not an admin." });
-    return false;
-  }
-  return true;
-};
-
-//////////////////////////////
-////////// email.js //////////
-//////////////////////////////
-
-import nodemailer from "nodemailer";
-import { truthy } from "../src/utils/index.js";
-
-export const makeAddress = (email, name) =>
-  [name ? `"${name}"` : "", `<${email}>`].filter(truthy).join(" ");
-
-export const makeSubject = (req_id) => `Support Request [${req_id}]`;
+export const makeSubject = (req_id: string) => `Support Request [${req_id}]`;
 
 const transporter = nodemailer.createTransport({
   // https://nodemailer.com/transports/stream
@@ -118,6 +50,9 @@ export function makeRawEmail(
 
 import { json } from "micro";
 import { parse } from "url";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+import { requestTemplates, responseTemplates } from "./templates.ts";
 
 export const bodyParser = (req) => {
   if (["POST", "PUT", "PATCH"].indexOf(req.method) !== -1) {
@@ -341,197 +276,3 @@ export async function getThreadInfo(req_id, supabase): Promise<ThreadInfo> {
     : {};
   return threadInfo;
 }
-
-//////////////////////////////
-////////// google.js //////////
-//////////////////////////////
-
-import { google } from "googleapis";
-
-const { GMAIL_SENDER_KEY_SECRET } = process.env;
-if (!GMAIL_SENDER_KEY_SECRET)
-  throw new Error("GMAIL_SENDER_KEY_SECRET not set.");
-
-const credentials = JSON.parse(
-  Buffer.from(GMAIL_SENDER_KEY_SECRET, "base64").toString("utf8")
-);
-
-const scopes = [
-  // "https://www.googleapis.com/auth/gmail.insert",
-  "https://www.googleapis.com/auth/gmail.modify",
-  "https://www.googleapis.com/auth/gmail.send",
-];
-
-function authorize() {
-  return new google.auth.GoogleAuth({ credentials, scopes }).getClient(); // async
-}
-
-export async function getGmail(user_email: string) {
-  const auth = await authorize();
-  auth.subject = user_email;
-  return google.gmail({ version: "v1", auth });
-}
-
-//////////////////////////////
-////////// supabase.js //////////
-//////////////////////////////
-
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
-
-const { SUPABASE_URL } = process.env;
-if (!SUPABASE_URL) throw new Error("SUPABASE_URL not set.");
-
-const { SUPABASE_ANON_KEY } = process.env;
-if (!SUPABASE_ANON_KEY) throw new Error("SUPABASE_ANON_KEY not set.");
-
-const { SUPABASE_SERVICE_ROLE_KEY } = process.env;
-if (!SUPABASE_SERVICE_ROLE_KEY)
-  throw new Error("SUPABASE_SERVICE_ROLE_KEY not set.");
-
-export const createUserClient = (accessToken) =>
-  createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    global: { headers: { Authorization: `Bearer ${accessToken}` } },
-  });
-
-export const createAdminClient = () =>
-  createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
-//////////////////////////////
-////////// templates.js //////////
-//////////////////////////////
-
-const RECEIVED =
-  "We’ve received your request and are currently processing it. Please allow us some time to review.";
-const REPLY =
-  "Update your request on the Investor Portal, or reply to this email to continue your request.";
-
-const template_html = (subject, htmlBody) => `
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>${subject}</title>
-  </head>
-  <body>
-${htmlBody}
-  </body>
-</html>
-`;
-
-const template_badge = (key, value) => `${key.toUpperCase()}: ${value}`;
-
-const template_margin_html = (text) =>
-  `<div style="margin-bottom: 1em">${text}</div>`;
-
-const template_preWrap_html = (text) =>
-  `<div style="white-space: pre-wrap">${text}</div>`;
-
-const template_heading_html = (text) => `
-<div><b>${text.toUpperCase()}</b></div>
-`;
-
-const template_heading_text = (text) => `
-=========================
-${text.toUpperCase()}
-=========================
-`;
-
-const template_section_html = (head_text, body_text) =>
-  template_margin_html(
-    `
-${template_heading_html(head_text)}
-${template_preWrap_html(body_text)}
-`
-  );
-
-const template_section_text = (head_text, body_text) => `
-${template_heading_text(head_text)}
-${body_text}
-`;
-
-const template_requestFooter_html = (req_short_id) => `
-<hr />
-<div style="font-size: 12px; color: #888;">
-  <div>${template_badge("Request ID", req_short_id)}</div>
-  <div>${REPLY}</div>
-</div>
-`;
-
-const template_requestFooter_text = (req_short_id) => `
--------------------------
-${template_badge("Request ID", req_short_id)}
-
-${REPLY}
-`;
-
-export const requestTemplates = (
-  subject,
-  { req_id, req_short_id, req_summary, req_details, invt_id_, file_id_ }
-) => [
-  template_html(
-    subject,
-    `
-${template_margin_html(RECEIVED)}
-
-${req_summary ? template_section_html("Summary", req_summary) : ""}
-
-${req_details ? template_section_html("Details", req_details) : ""}
-
-${
-  invt_id_.length
-    ? template_section_html("Related investment ID(s)", invt_id_.join("<br />"))
-    : ""
-}
-
-${
-  file_id_.length
-    ? template_section_html("Related document ID(s)", file_id_.join("<br />"))
-    : ""
-}
-
-${template_requestFooter_html(req_short_id)}
-`
-  ),
-
-  `
-${RECEIVED}
-
-${req_summary ? template_section_text("Summary", req_summary) : ""}
-${req_details ? template_section_text("Details", req_details) : ""}
-${
-  invt_id_.length
-    ? template_section_text("Related Investment ID(s)", invt_id_.join("\n"))
-    : ""
-}
-${
-  file_id_.length
-    ? template_section_text("Related Document ID(s)", file_id_.join("\n"))
-    : ""
-}
-
-${template_requestFooter_text(req_short_id)}
-`,
-];
-
-export const responseTemplates = (
-  subject,
-  { profile, req_id, res_status, res_note }
-) => [
-  template_html(
-    subject,
-    `
-${template_badge("Status", res_status)}
-
-${template_preWrap_html(res_note)}
-
-${template_requestFooter_html(req_id)}
-`
-  ),
-
-  `
-${template_badge("Status", res_status)}
-
-${res_note}
-
-${template_requestFooter_text(req_id)}
-`,
-];

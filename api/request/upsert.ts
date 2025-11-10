@@ -1,12 +1,13 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 // import { pick } from "rambda";
+import { getAuthenticatedUserIdOr401, getToken } from "../../api-lib/auth.ts";
 import {
-  getAuthenticatedUserIdOr401,
-  getToken,
+  bodyParser,
+  sendEmail_forRequest,
+  getThreadInfo,
   insertMessage,
-} from "../../api/utils.js";
-import { bodyParser, sendEmail_forRequest } from "../../api/utils.js";
-import { createUserClient, getThreadInfo } from "../../api/utils.js";
+} from "../../api-lib/email.ts";
+import { createUserClient } from "../../api-lib/supabase.ts";
 
 // const picker = pick(["req_summary", "req_details", "invt_id_", "file_id_"]);
 

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getAuthenticatedUserIdOr401 } from "../../api/utils.js";
-import { createAdminClient } from "../../api/utils.js";
+import { getAuthenticatedUserIdOr401 } from "../../api-lib/auth.ts";
+import { createAdminClient } from "../../api-lib/supabase.ts";
 
 // "POST"
 export default async function handler(req: VercelRequest, res: VercelResponse) {

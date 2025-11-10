@@ -1,7 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getIsAdminOr403, insertMessage } from "../../api/utils.js";
-import { bodyParser, sendEmail_forResponse } from "../../api/utils.js";
-import { createAdminClient, getThreadInfo } from "../../api/utils.js";
+import { getIsAdminOr403 } from "../../api-lib/auth.ts";
+import {
+  bodyParser,
+  sendEmail_forResponse,
+  insertMessage,
+  getThreadInfo,
+} from "../../api-lib/email.ts";
+import { createAdminClient } from "../../api-lib/supabase.ts";
 // import { createConversation } from "../../api-lib/helpscout/conversation.ts";
 
 // "POST"

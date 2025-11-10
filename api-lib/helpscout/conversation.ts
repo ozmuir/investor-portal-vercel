@@ -1,6 +1,6 @@
 import axios from "axios";
-import { createHelpScoutAuth, requestNewToken } from "./auth.js";
-import { helpscoutEndpoint } from "./base.js";
+import { createHelpScoutAuth, requestNewToken } from "./auth.ts";
+import { helpscoutEndpoint } from "./base.ts";
 
 const { HELPSCOUT_MAILBOX_ID } = process.env;
 if (!HELPSCOUT_MAILBOX_ID) throw new Error("HELPSCOUT_MAILBOX_ID not set.");

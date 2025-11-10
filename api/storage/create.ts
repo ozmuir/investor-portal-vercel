@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getIsAdminOr403 } from "../../api/utils.js";
-import { createAdminClient } from "../../api/utils.js";
+import { getIsAdminOr403 } from "../../api-lib/auth.ts";
+import { createAdminClient } from "../../api-lib/supabase.ts";
 import { BUCKET, ACCEPT_TYPE } from "../../src/variables.js";
 
 // "POST"
