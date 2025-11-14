@@ -163,5 +163,7 @@ export async function* scrapePressReleases(sourcePath, sourceCols) {
     }
   }
 
-  console.log(`\nDONE: Press Releases fetched. Success: ${ok}, Failed: ${bad}.`);
+  console.log(
+    `\nDONE: Press Releases fetched. Success: ${ok}, Failed: ${bad}.`
+  );
 }

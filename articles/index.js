@@ -17,6 +17,8 @@ const __dirname = path.dirname(__filename);
 
 import { createClient } from "@supabase/supabase-js";
 import pLimit from "p-limit";
+import YAML from "yaml";
+
 import { scrapePressReleases } from "./press-releases.js";
 import { readInvestorUpdates } from "./investor-updates.js";
 
@@ -33,13 +35,21 @@ async function* map(fn, iterable) {
 }
 
 (async function main() {
+  const articles = [];
+
   const investorUpdatesGen = map((it) => {
-    it.visibility = "authenticated";
+    it.visibility = it.visibility || "authenticated";
+    it.type = "investor-update";
+    it.tags.push("investor-update");
+    articles.push(it);
     return it;
   }, readInvestorUpdates(path.join(__dirname, INVESTOR_UPDATES_FILEPATH)));
 
   const pressReleasesGen = map((it) => {
-    it.visibility = "public";
+    it.visibility = it.visibility || "public";
+    it.type = "press-release";
+    it.tags.push("press-release");
+    articles.push(it);
     return it;
   }, scrapePressReleases(path.join(__dirname, PRESS_RELEASES_LIST_FILEPATH), PRESS_RELEASES_LIST_COLS));
 
@@ -55,10 +65,11 @@ async function* map(fn, iterable) {
   async function save(item) {
     const { uuid, ...fields } = item;
     try {
+      const { type, ...rest } = fields;
       const { data, error } = await supabase
         .from("articles")
         // https://supabase.com/docs/reference/javascript/upsert
-        .upsert({ id: uuid, ...fields })
+        .upsert({ id: uuid, ...rest })
         .select();
       if (error) {
         throw new Error(JSON.stringify(error));
@@ -80,10 +91,21 @@ async function* map(fn, iterable) {
   const tasks = [];
   await Promise.all([
     advance(investorUpdatesGen, tasks),
-    // advance(pressReleasesGen, tasks),
+    advance(pressReleasesGen, tasks),
   ]);
 
   await Promise.all(tasks);
+
+  articles.sort((a, b) => {
+    const typeCmp = a.type.localeCompare(b.type);
+    if (typeCmp !== 0) return typeCmp;
+    return new Date(a.date) - new Date(b.date);
+  });
+  fs.writeFileSync(
+    path.join(__dirname, "./articles.yaml"),
+    YAML.stringify(articles),
+    "utf8"
+  );
 
   console.log(`\nDONE: Stored to database. Success: ${ok}, Failed: ${bad}.`);
 })().catch((e) => {

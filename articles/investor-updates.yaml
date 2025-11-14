@@ -1,11 +1,12 @@
 # yaml-language-server: $schema=./investor-updates.schema.yaml
 - uuid: 019a558e-28e4-75c8-bda0-51bbc9ae2794
+  visibility: public
   url: ""
   tags: []
   date: "2025-11-04T12:00:00.000Z"
   title: "2025 Year-End Investor Update"
   summary: "Orthogonal Thinker enters 2026 as a unified, audited, and NASDAQ-bound holding company—integrating EI Ventures, Pluto 11.11, and its global ecosystem into one transparent, frequency-aligned structure bridging consciousness, capital, and exponential innovation."
-  body : |-
+  body: |-
     <p>Dear Investors and Friends,</p>
     <p>
       As 2025 comes to a close, we extend our deepest gratitude for your trust,

@@ -4,12 +4,12 @@
     "confirm": "Confirm",
     "email_confirmation": "Send confirmation link",
     "email_confirmations": "Send confirmation links",
-    "request_a_new": "Create a support request",
-    "request_the_new": "Create the support request",
-    "request_update": "Update the support request",
-    "account_delete": "Delete your account",
-    "upload_files": "Upload documents",
-    "upload_the_files": "Upload the documents"
+    "request_a_new": "Create Request",
+    "request_the_new": "Create Request",
+    "request_update": "Update Request",
+    "account_delete": "Delete Account",
+    "upload_files": "Upload Documents",
+    "upload_the_files": "Upload Documents"
   },
   "field_label": {
     "delete_confirm": "Type DELETE to confirm your intent",
